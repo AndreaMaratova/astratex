@@ -684,4 +684,39 @@ select count(1) from orders_hu ; # 971
 
 
 
+-- -------------------------------------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------------------------------------------
+# Vytvoření vw_orders_all
+-- -------------------------------------------------------------------------------------------------------------------------------------
+-- -------------------------------------------------------------------------------------------------------------------------------------
+
+create view vw_orders_all as
+select
+    concat(kod_zeme, '-', transakce_id) as global_transakce_id,
+    transakce_id as puvodni_transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    kod_zeme
+from orders_cz
+union all
+select
+    concat(kod_zeme, '-', transakce_id) as global_transakce_id,
+    transakce_id as puvodni_transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    kod_zeme
+from orders_sk
+union all
+select
+    concat(kod_zeme, '-', transakce_id) as global_transakce_id,
+    transakce_id as puvodni_transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    kod_zeme
+from orders_hu;
+
+select count(1) from vw_orders_all; # 2 882 záznamů = 952 (CZ) + 959 (SK) + 971 (HU);
 
