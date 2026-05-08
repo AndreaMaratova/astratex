@@ -6,7 +6,7 @@ Tento soubor slouží jako popis postupu při vypracování Case Study. Pokud by
 #### 1. Rozdělila jsem data ze zdrojového .xlsx souboru do tří .csv souborů dle národnosti. Vytvořila jsem samostatné soubory *cz.csv*, *sk.csv* a *hu.csv*. 
 #### 2. V databázi jsem vytvořila tři staging tabulky: *staging_orders_cz*, *staging_orders_sk* a *staging_orders_hu* dvěma novými sloupci:
 - transakce_id - id daného záznamu
-- Kod_zeme - země pro snažší filtrování
+- kod_zeme - země pro snazší filtrování
 
 ```sql
 # Vytvoření staging tabulky
@@ -35,7 +35,7 @@ select count(1) from staging_orders_cz; #969 - sedí
 
 
 ```
-#### 4. Zkontrolovala jsem, zda jsou všechny hodnoty v mnou pořadovaném formátu. Při vizuální kontrole dat v Excelu jsem si všimla zdánlivých NULL hodnot jak ve sloupci *zakaznik_id*, tak ve sloupci *castka*.
+#### 4. Zkontrolovala jsem, zda jsou všechny hodnoty v mnou požadovaném formátu. Při vizuální kontrole dat v Excelu jsem si všimla zdánlivých NULL hodnot jak ve sloupci *zakaznik_id*, tak ve sloupci *castka*.
 
 Nejprve jsem se rozhodla jsem se očistit data z obou stran o "neviditelné znaky" - escape znaky, tab a pevné mezery. 
 
@@ -82,11 +82,11 @@ where zakaznik_id is null
 	or trim(zakaznik_id) = ''
 	or trim(datum_nakupu) = ''
 	or trim(castka) = ''
-	or char_length(castka) = 1
+	or char_length(castka) = 1 # slouží pro kontrolu, zda nejsou v tabulce další nesmyslné znaky
 	or zakaznik_id not like "CZ%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
-	or datum_nakupu not between '2023-01-01' and '2024-12-31';
+	or datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 ```
 <img width="650" height="650" alt="image" src="https://github.com/user-attachments/assets/8c5d8bec-629c-43d5-9079-577cdd0f18e2" />
@@ -360,7 +360,7 @@ posledni_den as (
 ),
 ```
 
-#### 3. Jako další jsem doplnila datum první objednávky každého zákazníka. Každý zákazník má právě jedno datum svého prvního nákupu. Seskupení muselo proběhnout podle *zeme*, protože je potřeba, aby report fungoval jak pro jednotlivé samostané země, tak i jako celek.
+#### 3. Jako další jsem doplnila datum první objednávky každého zákazníka. Každý zákazník má právě jedno datum svého prvního nákupu. Seskupení muselo proběhnout podle *zeme*, protože je potřeba, aby report fungoval jak pro jednotlivé samostatné země, tak i jako celek.
 
 
 ```sql
@@ -487,7 +487,7 @@ agregace_s_dostupnosti as (
 
 ```
 
-#### 8. V posledním kroku jsem se dostala k výpočtu procent retence. Retence je vypořtena jako podíl unikátních zákazníků, kteří se v daném období vrátili, vůči celkové velikosti dané kohorty. M0 je vždy 100 %. Opět kontroluji, jestli mám všechna data pro férové vyhodnocení kohorty. Pokud je datum po konci sledovaného období, zobrazí se NULL. 
+#### 8. V posledním kroku jsem se dostala k výpočtu procent retence. Retence je vypočtena jako podíl unikátních zákazníků, kteří se v daném období vrátili, vůči celkové velikosti dané kohorty. M0 je vždy 100 %. Opět kontroluji, jestli mám všechna data pro férové vyhodnocení kohorty. Pokud je datum po konci sledovaného období, zobrazí se NULL. 
 
 ```sql
 select
