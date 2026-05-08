@@ -4,6 +4,8 @@ Tento projekt je vypracovanou case study v rámci přijímacího řízení na po
 
 Detailně popsaný postup naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/postup.md).
 
-Samostatné SQL skripty naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/skript.sql).
+Kompletní SQL skript naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/skript.sql).
+
+SQL skript ke kohortní analýze naleznete [zde](). 
 
 Vizualizaci dat přes Looker Studio naleznete [zde](). 
