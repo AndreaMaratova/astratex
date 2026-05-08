@@ -4,7 +4,7 @@ Tento soubor slouží jako popis postupu při vypracování Case Study. Pokud by
 
 ## 1. Validace a nahrání zdrojových dat do databáze
 #### 1. Rozdělila jsem data ze zdrojového .xlsx souboru do tří .csv souborů dle národnosti. Vytvořila jsem samostatné soubory *cz.csv*, *sk.csv* a *hu.csv*. 
-#### 2. V databázi jsem vytvořila tři staging tabulky: *staging_orders_cz*, *staging_orders_sk* a *staging_orders_hu* dvěma novými sloupci:
+#### 2. V databázi jsem vytvořila tři staging tabulky: *staging_orders_cz*, *staging_orders_sk* a *staging_orders_hu* se dvěma novými sloupci:
 - transakce_id - id daného záznamu
 - kod_zeme - země pro snazší filtrování
 
