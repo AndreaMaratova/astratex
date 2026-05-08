@@ -22,7 +22,7 @@ Kompletní SQL skript naleznete [zde](https://github.com/AndreaMaratova/CRM-Anal
 
 SQL skript ke kohortní analýze naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/skript_kohortni_analyza.sql). 
 
-Export výsledné kohorní retenční tabulky naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/kohorni_retencni_tabulka.csv). Soubor neotvírejte v Excelu - přepíše se formátování. 
+Export výsledné kohortní retenční tabulky naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/kohorni_retencni_tabulka.csv). Soubor neotvírejte v Excelu - přepíše se formátování. 
 
 Vizualizaci dat přes Looker Studio naleznete [zde](https://datastudio.google.com/s/iEPu3P8QDuc).
 
@@ -45,6 +45,7 @@ Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře.
 - Jelikož vizualizace byla dělána v Looker Studiu, které mi není úplně nejbližší, tak bych řekla, že největší limity a úskalí pro mě bylo ze začátku samotné Looker Studio :D  
 
 Shrnutí práce (3-5 vět)
-???
+V rámci case study jsem připravila transakční data ze tří trhů, provedla jejich validaci a očištění ve staging tabulkách a následně vytvořila finální tabulky. Nad sjednoceným view jsem připravila SQL kohortní analýzu zákaznické retence v obdobích M0, M3, M6 a M9. Výsledky jsem exportovala do retenční tabulky a vizualizovala v Looker Studiu s možností filtrování podle země a měsíce kohorty.
+
 <img width="1824" height="1483" alt="image" src="https://github.com/user-attachments/assets/bb7ff6aa-2ecc-4e47-b5f7-88e8958f30d0" />
 <img width="1805" height="695" alt="image" src="https://github.com/user-attachments/assets/0867c3ea-360f-4822-9ae6-7db10d1c4a0e" />
