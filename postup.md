@@ -82,7 +82,7 @@ where zakaznik_id is null
 	or trim(zakaznik_id) = ''
 	or trim(datum_nakupu) = ''
 	or trim(castka) = ''
-	or char_length(castka) = 1 # slouží pro kontrolu, zda nejsou v tabulce další nesmyslné znaky
+	or char_length(castka) = 1 # chci si zobrazit případné nesmyslné výsledky / znaky
 	or zakaznik_id not like "CZ%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
