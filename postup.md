@@ -427,7 +427,7 @@ obj_s_kohortou as (
 
 ```
 
-#### 6. Poté jsem provedla agregaci dat tak, aby se mi zákazníci rozhodili do správných retenčních období M3, M6 a M9. Aby nedošlo ke zkreslení dat, zákazník, který v měsíci svého návratu udělal více objednávek, byl započten právě jednou, jsem použila *count(distinct case...)*. 
+#### 6. Poté jsem provedla agregaci dat tak, aby se mi zákazníci rozhodili do správných retenčních období M3, M6 a M9. Aby nedošlo ke zkreslení dat, k započtení zákazníka, který v měsíci svého návratu udělal více objednávek, právě jednou, jsem použila *count(distinct case...)*. 
 
 ```sql
 
@@ -467,7 +467,7 @@ agregace_kohort as (
 ),
 
 ```
-#### 7. Dále jsem doplnila datum, které je poslední pro určení daného retenčního okna dané objednávky. To použiju později k určení, jestli mám všechna data pro správné určení kohorty. Pokud je datum po 2024-09-30, pak se u daného okna zobrazí NULL, jelikož nemám všechna data pro správné vypočtení. 
+#### 7. Dále jsem doplnila datum, které je poslední pro určení daného retenčního okna dané objednávky. To použiju později k určení, jestli mám všechna data pro správné určení kohorty. Pokud je datum po 2024-09-30, pak se u daného okna zobrazí NULL, jelikož nemám všechna data pro správné vypočtení a mohlo by dojít k chybnému zkreslení. 
 
 
 ```sql
@@ -487,7 +487,7 @@ agregace_s_dostupnosti as (
 
 ```
 
-#### 8. V posledním kroku jsem se dostala k výpočtu procent retence. M0 je vždy 100 %. Opět kontroluji, jestli mám všechna data pro férové vyhodnocení kohorty. Pokud je datum po konci sledovaného období, zobrazí se NULL. 
+#### 8. V posledním kroku jsem se dostala k výpočtu procent retence. Retence je vypořtena jako podíl unikátních zákazníků, kteří se v daném období vrátili, vůči celkové velikosti dané kohorty. M0 je vždy 100 %. Opět kontroluji, jestli mám všechna data pro férové vyhodnocení kohorty. Pokud je datum po konci sledovaného období, zobrazí se NULL. 
 
 ```sql
 select
