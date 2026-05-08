@@ -70,7 +70,7 @@ where zakaznik_id is null
 	or zakaznik_id not like "CZ%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
-	or datum_nakupu not between '2023-01-01' and '2024-12-31';
+	or datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 
 
@@ -108,7 +108,7 @@ where castka like '%,%';
 
 # bod g)
 delete from staging_orders_cz 
-where datum_nakupu not between '2023-01-01' and '2024-12-31';
+where datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 
 select * from staging_orders_cz soc 
@@ -303,7 +303,7 @@ where zakaznik_id is null
 	or zakaznik_id not like "SK%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
-	or datum_nakupu not between '2023-01-01' and '2024-12-31';
+	or datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 
 
@@ -341,7 +341,7 @@ where datum_nakupu like '%.%';
 
 # bod g)
 delete from staging_orders_sk
-where datum_nakupu not between '2023-01-01' and '2024-12-31';
+where datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 select * from staging_orders_sk sos 
 limit 10;
@@ -537,7 +537,7 @@ where zakaznik_id is null
 	or zakaznik_id not like "HU%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
-	or datum_nakupu not between '2023-01-01' and '2024-12-31';
+	or datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 
 
@@ -575,7 +575,7 @@ where datum_nakupu like '%.%';
 
 # bod g)
 delete from staging_orders_hu 
-where datum_nakupu not between '2023-01-01' and '2024-12-31';
+where datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 select * from staging_orders_hu soh 
 limit 10;
