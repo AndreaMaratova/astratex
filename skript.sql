@@ -69,7 +69,8 @@ where zakaznik_id is null
 	or char_length(castka) = 1
 	or zakaznik_id not like "CZ%"
 	or castka like '-%'
-	or datum_nakupu like '%.%';
+	or datum_nakupu like '%.%'
+	or datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 
 
@@ -100,12 +101,15 @@ update staging_orders_cz
 set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
 where datum_nakupu like '%.%';
 
-
-
-# nahrazení desetinné čárky tečkou
+# bod f)
 update staging_orders_cz
 set castka = replace(castka, ',', '.')
 where castka like '%,%';
+
+# bod g)
+delete from staging_orders_cz 
+where datum_nakupu not between '2023-01-01' and '2024-12-31';
+
 
 select * from staging_orders_cz soc 
 limit 10;
@@ -297,7 +301,8 @@ where zakaznik_id is null
 	or char_length(castka) = 1
 	or zakaznik_id not like "SK%"
 	or castka like '-%'
-	or datum_nakupu like '%.%';
+	or datum_nakupu like '%.%'
+	or datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 
 
@@ -328,12 +333,14 @@ update staging_orders_sk
 set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
 where datum_nakupu like '%.%';
 
-
-
-# nahrazení desetinné čárky tečkou
+# bod f)
 update staging_orders_sk
 set castka = replace(castka, ',', '.')
 where castka like '%,%';
+
+# bod g)
+delete from staging_orders_sk 
+where datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 select * from staging_orders_sk sos 
 limit 10;
@@ -527,7 +534,8 @@ where zakaznik_id is null
 	or char_length(castka) = 1
 	or zakaznik_id not like "HU%"
 	or castka like '-%'
-	or datum_nakupu like '%.%';
+	or datum_nakupu like '%.%'
+	or datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 
 
@@ -558,12 +566,14 @@ update staging_orders_hu
 set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
 where datum_nakupu like '%.%';
 
-
-
-# nahrazení desetinné čárky tečkou
+# bod f)
 update staging_orders_hu
 set castka = replace(castka, ',', '.')
 where castka like '%,%';
+
+# bod g)
+delete from staging_orders_hu 
+where datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 select * from staging_orders_hu soh 
 limit 10;
