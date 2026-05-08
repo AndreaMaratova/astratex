@@ -89,7 +89,8 @@ where zakaznik_id is null
 	or datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 ```
-<img width="620" height="450" alt="image" src="https://github.com/user-attachments/assets/f3923550-dd0d-4c13-b703-c5465e7bab07" />
+<img width="650" height="650" alt="image" src="https://github.com/user-attachments/assets/8c5d8bec-629c-43d5-9079-577cdd0f18e2" />
+
 
 
 
@@ -111,7 +112,7 @@ d) Ve sloupci *castka* se objevují i záporné hodnoty. Ty považuji za vratky 
 
 e) Upravila jsem formát datumu z dd.mm.yyyy na yyyy-mm-dd
 
-f) odstranila data, která nespadají do období 2023-01-01 - 2024-12-31.
+f) Odstranila data, která nespadají do období 2023-01-01 - 2024-09-30.
 
 
 ```sql
@@ -143,8 +144,13 @@ set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d'
 where datum_nakupu like '%.%';
 
 # bod f)
+update staging_orders_cz
+set castka = replace(castka, ',', '.')
+where castka like '%,%';
+
+# bod g)
 delete from staging_orders_cz 
-where datum_nakupu not between '2023-01-01' and '2024-12-31'; 
+where datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 ```
 
@@ -242,10 +248,10 @@ having count(1) > 1;
 
 ```
 
-Po čištění dat zbylo celkem 952 záznamů z původních 969. 
+Po čištění dat zbylo celkem 948 záznamů z původních 969. 
 
 ```sql
-select count(1) from staging_orders_cz soc ; # 952
+select count(1) from staging_orders_cz soc ; # 948
 ```
 
 #### 6. Vytvořila jsem finální tabulky a zkontrolovala, že se nahrály všechny záznamy
@@ -277,7 +283,7 @@ select
 from staging_orders_cz;
 
 # Kontrola počtu záznamů
-select count(1) from orders_cz oc; # 952
+select count(1) from orders_cz oc; # 948
 
 ```
 
