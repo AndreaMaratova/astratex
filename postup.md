@@ -117,7 +117,7 @@ update staging_orders_cz
 set zakaznik_id = concat('CZ', zakaznik_id)
 where zakaznik_id is not null
   and trim(zakaznik_id) <> ''
-  and zakaznik_id not like 'CZ%'
+  and zakaznik_id not like 'CZ%';
 
 # bod c)
 update staging_orders_cz
@@ -141,9 +141,136 @@ set castka = replace(castka, ',', '.')
 where castka like '%,%';
 ```
 
-# **DUPLICITY**
-# **Vytvořit finální tabulky**
+Změnila jsem formát u datumu z dd.mm.yyyy na yyyy-mm-dd
+
+```sql
+# změna formátu u datumu z dd.mm.yyyy na yyyy-mm-dd
+
+update staging_orders_cz
+set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
+where datum_nakupu like '%.%';
+
+```
 
 
+#### 5. Odstranila jsem duplicity
 
+```sql
+# Duplicity
+# 1 - počet duplicit
+select count(1) as pocet_duplicit
+from (
+    select
+        transakce_id,
+        row_number() over (
+            partition by zakaznik_id, datum_nakupu, castka
+            order by transakce_id
+        ) as poradi_v_duplicite
+    from staging_orders_cz
+) x
+where poradi_v_duplicite > 1;
+
+# 2 - zobrazení duplicit
+
+select
+    soc.transakce_id,
+    soc.zakaznik_id,
+    soc.datum_nakupu,
+    soc.castka,
+    d.pocet
+from staging_orders_cz soc
+join (
+    select
+        zakaznik_id,
+        datum_nakupu,
+        castka,
+        count(1) as pocet
+    from staging_orders_cz
+    group by
+        zakaznik_id,
+        datum_nakupu,
+        castka
+    having count(1) > 1
+) d
+    on soc.zakaznik_id = d.zakaznik_id
+   and soc.datum_nakupu = d.datum_nakupu
+   and soc.castka = d.castka
+order by
+    soc.zakaznik_id,
+    soc.datum_nakupu,
+    soc.castka,
+    soc.transakce_id;
+
+
+# 3 - smazání duplicit
+
+delete from staging_orders_cz
+where transakce_id in (
+    select transakce_id
+    from (
+        select
+            transakce_id,
+            row_number() over (
+                partition by zakaznik_id, datum_nakupu, castka
+                order by transakce_id
+            ) as poradi_v_duplicite
+        from staging_orders_cz
+    ) x
+    where poradi_v_duplicite > 1
+);
+
+# 4 - kontrola smazaných duplicit
+
+select
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    count(1) as pocet
+from staging_orders_cz
+group by
+    zakaznik_id,
+    datum_nakupu,
+    castka
+having count(1) > 1;
+
+```
+
+Po čištění dat zbylo celkem 952 záznamů z původních 969. 
+
+```sql
+select count(1) from staging_orders_cz soc ; # 952
+```
+
+#### 6. Vytvořila jsem finální tabulky a zkontrolovala, že se nahrály všechny záznamy
+
+```sql
+create table orders_cz (
+    transakce_id int primary key,
+    zakaznik_id varchar(50) not null,
+    datum_nakupu date not null,
+    castka decimal(10,2) not null,
+    kod_zeme varchar(2) not null
+);
+
+# Nahrání dat do tabulky
+
+insert into orders_cz (
+    transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    kod_zeme
+)
+select
+    transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    cast(castka as decimal(10,2)) as castka,
+    kod_zeme
+from staging_orders_cz;
+
+# Kontrola počtu záznamů
+select count(1) from orders_cz oc; # 952
+
+```
 
