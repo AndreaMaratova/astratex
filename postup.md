@@ -317,3 +317,252 @@ Provedla jsem kontrolu, jestli se nahrály všechny záznamy.
 ```sql
 select count(1) from vw_orders_all; # 2 882 záznamů = 952 (CZ) + 959 (SK) + 971 (HU)    - sedí
 ```
+
+
+## Vytvoření skriptu pro výpočet kohorty
+
+#### 1. Nejprve jsem vytvořila základ pro správný výpočet kohorty. Aby bylo možné v reportu jednodušše filtrovat, jsou data uvedena jak po jednotlivých zemích, tak i jako celek za všechny 3 země. 
+
+```sql
+with obj as (
+
+    # data za jednotlivé země
+    select
+        kod_zeme as zeme,
+        zakaznik_id,
+        datum_nakupu,
+        castka
+    from vw_orders_all
+
+    union all
+
+    # celek za všechny 3 země
+    select
+        'ALL' as zeme,
+        zakaznik_id,
+        datum_nakupu,
+        castka
+    from vw_orders_all
+
+),
+
+```
+#### 2. Vytvořila jsem si vypočtené pomocné sloupce, které zobrazují např. poslední den (konec sledovaného období). Ten mi slouží k určení, jestli retenční okno ještě spadá do časového okna dat, které mám, nebo ne. Určitě nebude možné vyhodnotit M6 nebo M9 pro pozdější data, jelikož nejsou dostupná data od 2024-10-01. V těchto případech se hodnota nastaví jako NULL. 
+
+```sql
+posledni_den as (
+
+    # poslední den v datasetu
+    select
+        last_day(max(datum_nakupu)) as konec_sledovaneho_obdobi
+    from vw_orders_all
+
+),
+```
+
+#### 3. Jako další jsem doplnila datum první objednávky každého zákazníka. Každý zákazník má právě jedno datum svého prvního nákupu. Seskupení muselo proběhnout podle *zeme*, protože je potřeba, aby report fungoval jak pro jednotlivé samostané země, tak i jako celek.
+
+
+```sql
+prvni_obj as (
+
+    # první nákup každého zákazníka
+    select
+        zeme,
+        zakaznik_id,
+        min(datum_nakupu) as prvni_obj_datum
+    from obj
+    group by
+        zeme,
+        zakaznik_id
+
+),
+
+```
+
+#### 4. Jako další jsem zařadila zákazníka do kohorty na základě jeho první objednávky. Kohorta je měsíc prvního nákupu, takže všechna data v měsíci převádím na první den v měsíci. Formát datumu jsem pak zpětně převedla opět na date. 
+
+
+```sql
+
+
+kohorta as (
+
+    # zařazení zákazníka do kohorty dle jeho první objednávky
+    select
+        zeme,
+        zakaznik_id,
+        prvni_obj_datum,
+        str_to_date(date_format(prvni_obj_datum, '%Y-%m-01'), '%Y-%m-%d') as kohorta_mesic
+    from prvni_obj
+
+),
+
+```
+#### 5. Pak jsem připojila kohortu zákazníka ke každé objednávce. Doplnila jsem k objednávce měsíc kohorty a počet měsíců od prvního nákupu.  
+
+
+
+```sql
+obj_s_kohortou as (
+
+
+	# Připojení kohorty zákazníka ke každé objednávce a počet měsíců od jeho prvního nákupu
+    select
+        o.zeme,
+        o.zakaznik_id,
+        o.datum_nakupu,
+        o.castka,
+        k.kohorta_mesic,
+        period_diff(
+            date_format(o.datum_nakupu, '%Y%m'),
+            date_format(k.prvni_obj_datum, '%Y%m')
+        ) as pocet_mesicu_od_prvni_obj
+    from obj o
+    join kohorta k
+        on o.zeme = k.zeme
+       and o.zakaznik_id = k.zakaznik_id
+
+),
+
+```
+
+#### 6. Poté jsem provedla agregaci dat tak, aby se mi zákazníci rozhodili do správných retenčních období M3, M6 a M9. Aby nedošlo ke zkreslení dat, zákazník, který v měsíci svého návratu udělal více objednávek, byl započten právě jednou, jsem použila *count(distinct case...)*. 
+
+```sql
+
+agregace_kohort as (
+
+    # agregace zákazníků podle kohorty a retenčních období
+    select
+        zeme,
+        kohorta_mesic,
+
+        # velikost kohorty = počet zákazníků, kteří měli v daném měsíci první nákup
+        count(distinct zakaznik_id) as velikost_kohorty,
+
+        # zákazníci, kteří se vrátili 2 až 4 měsíce po prvním nákupu
+        count(distinct case
+            when pocet_mesicu_od_prvni_obj between 2 and 4
+            then zakaznik_id
+        end) as zakaznici_mesic_3,
+
+        # zákazníci, kteří se vrátili 5 až 7 měsíců po prvním nákupu
+        count(distinct case
+            when pocet_mesicu_od_prvni_obj between 5 and 7
+            then zakaznik_id
+        end) as zakaznici_mesic_6,
+
+        # zákazníci, kteří se vrátili 8 až 10 měsíců po prvním nákupu
+        count(distinct case
+            when pocet_mesicu_od_prvni_obj between 8 and 10
+            then zakaznik_id
+        end) as zakaznici_mesic_9
+
+    from obj_s_kohortou
+    group by
+        zeme,
+        kohorta_mesic
+
+),
+
+```
+#### 7. Dále jsem doplnila datum, které je poslední pro určení daného retenčního okna dané objednávky. To použiju později k určení, jestli mám všechna data pro správné určení kohorty. Pokud je datum po 2024-09-30, pak se u daného okna zobrazí NULL, jelikož nemám všechna data pro správné vypočtení. 
+
+
+```sql
+
+
+agregace_s_dostupnosti as (
+
+	# Ke kohortě přidáme datum konce pro sledované období. Pokud datum konce nespadá do časového okna 2023-01-01 - 2024-09-30, pak se retenční okno nevyhodnotí - NULL
+
+    select
+        a.*,
+        p.konec_sledovaneho_obdobi
+    from agregace_kohort a
+    cross join posledni_den p
+
+),
+
+```
+
+#### 8. V posledním kroku jsem se dostala k výpočtu procent retence. M0 je vždy 100 %. Opět kontroluji, jestli mám všechna data pro férové vyhodnocení kohorty. Pokud je datum po konci sledovaného období, zobrazí se NULL. 
+
+```sql
+select
+    zeme,
+    kohorta_mesic,
+    velikost_kohorty,
+
+    
+    100.00 as retence_mesic_0_pct, # month 0 je baseline, tedy 100 % zákazníků v dané kohortě
+
+    # m3 = zákazníci s nákupem 2 až 4 měsíce po prvním nákupu, výsledek se zobrazí jen v případě, kdy je dostupné celé okno (tedy 4 měsíce od nákupu)
+    case
+        when konec_sledovaneho_obdobi >= last_day(date_add(kohorta_mesic, interval 4 month))
+        then round(zakaznici_mesic_3 * 100.0 / velikost_kohorty, 2)
+        else null
+    end as retence_mesic_3_pct,
+
+    # m6 = zákazníci s nákupem 5 až 7 měsíců po prvním nákupu, výsledek se zobrazí jen v případě, kdy je dostupné celé okno (tedy 7 měsíců od nákupu)
+    case
+        when konec_sledovaneho_obdobi >= last_day(date_add(kohorta_mesic, interval 7 month))
+        then round(zakaznici_mesic_6 * 100.0 / velikost_kohorty, 2)
+        else null
+    end as retence_mesic_6_pct,
+
+    # m9 = zákazníci s nákupem 8 až 10 měsíců po prvním nákupu, výsledek se zobrazí jen v případě, kdy je dostupné celé okno (tedy 10 měsíců od nákupu)
+    case
+        when konec_sledovaneho_obdobi >= last_day(date_add(kohorta_mesic, interval 10 month))
+        then round(zakaznici_mesic_9 * 100.0 / velikost_kohorty, 2)
+        else null
+    end as retence_mesic_9_pct,
+
+    case
+        when konec_sledovaneho_obdobi >= last_day(date_add(kohorta_mesic, interval 4 month))
+        then zakaznici_mesic_3
+        else null
+    end as zakaznici_mesic_3,
+
+    case
+        when konec_sledovaneho_obdobi >= last_day(date_add(kohorta_mesic, interval 7 month))
+        then zakaznici_mesic_6
+        else null
+    end as zakaznici_mesic_6,
+
+    case
+        when konec_sledovaneho_obdobi >= last_day(date_add(kohorta_mesic, interval 10 month))
+        then zakaznici_mesic_9
+        else null
+    end as zakaznici_mesic_9,
+
+    konec_sledovaneho_obdobi,
+from agregace_s_dostupnosti;
+
+```
+#### 9. Pro info a kontrolu jsem ještě doplnila poslední den, do kterého bych musela mít data pro správné vyhodnocení retenčního okna. 
+
+```sql
+
+    # poslední den retenčního okna, kdy je možné vyhodnotit
+    last_day(date_add(kohorta_mesic, interval 4 month)) as datum_potrebne_pro_m3,
+    last_day(date_add(kohorta_mesic, interval 7 month)) as datum_potrebne_pro_m6,
+    last_day(date_add(kohorta_mesic, interval 10 month)) as datum_potrebne_pro_m9
+
+```
+#### 10. Data jsem pro přehled seřadila dle země a měsíce dané kohorty. 
+
+```sql
+
+order by
+    case
+        when zeme = 'ALL' then 1
+        when zeme = 'CZ' then 2
+        when zeme = 'SK' then 3
+        when zeme = 'HU' then 4
+        else 5
+    end,
+    kohorta_mesic;
+```
+
