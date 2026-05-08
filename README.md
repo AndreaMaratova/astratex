@@ -2,6 +2,7 @@
 
 <img width="1983" height="793" alt="39ea498b-ccd7-44f4-9c09-c29d4af108af" src="https://github.com/user-attachments/assets/a8c790fe-8e0c-438d-99ec-207412e9a47c" />
 
+<div align="left"> 
 
 ### Tento projekt je vypracovanou Case Study v rámci přijímacího řízení na pozici CRM Analytik, jejíž cílem je vytvoření kohortní analýzy pomocí SQL ze zdrojových dat v .xlsx a vizualizace výsledků v Looker Studiu. Jedná se o data e-shopu ze 3 různých zemí - Česka, Slovenska a Maďarska.  
 
