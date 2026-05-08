@@ -274,3 +274,37 @@ select count(1) from orders_cz oc; # 952
 
 ```
 
+## 2. Vytvoření view pro kohortní analýzu
+
+Pro kohortní analýzu jsem se rozhodla vytvořit view, nad kterým budu danou analýzu stavět. View bude kombinací všech tří tabulek *orders_cz*, *orders_sk* a *orders_hu*.
+
+```sql
+create view vw_orders_all as
+select
+    concat(kod_zeme, '-', transakce_id) as global_transakce_id,
+    transakce_id as puvodni_transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    kod_zeme
+from orders_cz
+union all
+select
+    concat(kod_zeme, '-', transakce_id) as global_transakce_id,
+    transakce_id as puvodni_transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    kod_zeme
+from orders_sk
+union all
+select
+    concat(kod_zeme, '-', transakce_id) as global_transakce_id,
+    transakce_id as puvodni_transakce_id,
+    zakaznik_id,
+    datum_nakupu,
+    castka,
+    kod_zeme
+from orders_hu;
+```
+
