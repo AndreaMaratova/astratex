@@ -537,7 +537,7 @@ select
         else null
     end as zakaznici_mesic_9,
 
-    konec_sledovaneho_obdobi,
+    konec_sledovaneho_obdobi
 from agregace_s_dostupnosti;
 
 ```
