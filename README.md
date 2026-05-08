@@ -34,15 +34,15 @@ Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře.
 
 
 1) Jaký datový zdroj bys napojil/a a jak bys data připravil/a pro Looker Studio
-- Záleželo by, kde by zdrojová data byla. Já jsem pro tento úkol šla cestou "nejmenšího odporu" a jelikož jde o jednorázové řešení, nahrála jsem .csv do Google Sheets, nad kterými jsem pak udělala vizualizaci v Looker Studiu. V nějakém dlouhodobém řešení by pak bylo ideální napojit se na danou databázi, kde by se data počítala přes view. Jelikož ale moje databáze běží lokálně, bylo by napojení na Looker Studio náročnější. 
+- Záleželo by, kde by zdrojová data byla. Já jsem pro tento úkol šla cestou "nejmenšího odporu" a jelikož jde o jednorázové řešení, nahrála jsem .csv do Google Sheets, nad kterými jsem pak udělala vizualizaci v Looker Studiu. V produkčním prostředí bych preferovala přímé napojení Looker Studia na databázové view nebo datový sklad, aby byl report automaticky aktualizovaný a nebylo nutné pracovat s ručním exportem. Jelikož moje databáze běží lokálně, bylo by napojení na Looker Studio náročnější.
 2) Jaké typy vizualizací bys zvolil/a a proč
 - Heatmapu - na první dobrou z ní člověk vyčte, co potřebuje
 - Spojnicový graf - pro zobrazení dat v čase
 - Rychlý přehled - pro rychlé zobrazení např. průměrné retence
 3) Jak bys ošetřil/a filtry a jejich vzájemné propojení
-- ???
+- Filtry jsem zvolila na základě země (CZ, SK, HU a ALL, které je kombinací všech zemí). Jako další filtr jsem zvolila filtr měsíce kohorty. Oba filtry jsou napojené na stejný zdroj dat, takže se automaticky promítají do všech metrik i grafů.
 4) Jakékoliv limity nebo úskalí, která by tě při realizaci čekala
-- Jelikož vizualizace byla dělána v Looker Studiu, které mi není úplně nejbližší, tak bych řekla, že největší limity a úskalí pro mě bylo ze začátku samotné Looker Studio :D  
+- Jelikož vizualizace byla dělána v Looker Studiu, které mi není úplně nejbližší, tak bych řekla, že největším úskalím pro mě bylo ze začátku samotné Looker Studio :D Asi největším limitem zvoleného řešení je ruční export dat do Google Sheets. Pro dlouhodobé produkční využití by bylo vhodnější přímé napojení na databázi nebo datový sklad. Dalším úskalím je správné nastavení datových typů v Google Sheets a agregací v Looker Studiu, aby se předpočítané retenční metriky dále nesčítaly nebo neinterpretovaly jako text.
 
 Shrnutí práce (3-5 vět)
 V rámci case study jsem připravila transakční data ze tří trhů, provedla jejich validaci a očištění ve staging tabulkách a následně vytvořila finální tabulky. Nad sjednoceným view jsem připravila SQL kohortní analýzu zákaznické retence v obdobích M0, M3, M6 a M9. Výsledky jsem exportovala do retenční tabulky a vizualizovala v Looker Studiu s možností filtrování podle země a měsíce kohorty.
