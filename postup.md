@@ -85,7 +85,8 @@ where zakaznik_id is null
 	or char_length(castka) = 1
 	or zakaznik_id not like "CZ%"
 	or castka like '-%'
-	or datum_nakupu like '%.%';
+	or datum_nakupu like '%.%'
+	or datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 ```
 <img width="620" height="450" alt="image" src="https://github.com/user-attachments/assets/f3923550-dd0d-4c13-b703-c5465e7bab07" />
@@ -109,6 +110,8 @@ d) Ve sloupci *castka* se objevují i záporné hodnoty. Ty považuji za vratky 
 - Opět vzhledem k charakteru case study jsem se rozhodla pro toto řešení. Za jiných okolností by se data mazat nemusela.
 
 e) Upravila jsem formát datumu z dd.mm.yyyy na yyyy-mm-dd
+
+f) odstranila data, která nespadají do období 2023-01-01 - 2024-12-31.
 
 
 ```sql
@@ -138,6 +141,10 @@ where castka like '-%';
 update staging_orders_cz
 set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
 where datum_nakupu like '%.%';
+
+# bod f)
+delete from staging_orders_cz 
+where datum_nakupu not between '2023-01-01' and '2024-12-31'; 
 
 ```
 
