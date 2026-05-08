@@ -70,7 +70,7 @@ where zakaznik_id is null
 	or zakaznik_id not like "CZ%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
-	or datum_nakupu not between '2023-01-01' and '2024-09-30';
+	or datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 
 
@@ -113,6 +113,7 @@ where datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 select * from staging_orders_cz soc 
 limit 10;
+
 
 
 
@@ -193,7 +194,7 @@ group by
     castka
 having count(1) > 1;
 
-select count(1) from staging_orders_cz soc ; # 952
+select count(1) from staging_orders_cz soc ; # 948
 
 
 # Vytvoření finálních tabulek
@@ -225,7 +226,7 @@ select
 from staging_orders_cz;
 
 # Kontrola počtu záznamů
-select count(1) from orders_cz oc; # 952
+select count(1) from orders_cz oc; # 948
 
 
 
@@ -302,7 +303,7 @@ where zakaznik_id is null
 	or zakaznik_id not like "SK%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
-	or datum_nakupu not between '2023-01-01' and '2024-09-30';
+	or datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 
 
@@ -424,7 +425,7 @@ group by
     castka
 having count(1) > 1;
 
-select count(1) from staging_orders_sk sos ; # 959
+select count(1) from staging_orders_sk sos ; # 955
 
 select * from staging_orders_sk;
 
@@ -458,7 +459,7 @@ select
 from staging_orders_sk;
 
 # Kontrola počtu záznamů
-select count(1) from orders_sk ; # 959
+select count(1) from orders_sk ; # 955
 
 
 
@@ -535,7 +536,7 @@ where zakaznik_id is null
 	or zakaznik_id not like "HU%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
-	or datum_nakupu not between '2023-01-01' and '2024-09-30';
+	or datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 
 
@@ -657,7 +658,7 @@ group by
     castka
 having count(1) > 1;
 
-select count(1) from staging_orders_hu soh ; # 971
+select count(1) from staging_orders_hu soh ; # 967
 
 select * from staging_orders_hu;
 
@@ -690,7 +691,7 @@ select
 from staging_orders_hu;
 
 # Kontrola počtu záznamů
-select count(1) from orders_hu ; # 971
+select count(1) from orders_hu ; # 967
 
 
 
@@ -728,5 +729,5 @@ select
     kod_zeme
 from orders_hu;
 
-select count(1) from vw_orders_all; # 2 882 záznamů = 952 (CZ) + 959 (SK) + 971 (HU);
+select count(1) from vw_orders_all; # 2 870 záznamů = 948 (CZ) + 955 (SK) + 967 (HU);
 
