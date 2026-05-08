@@ -110,9 +110,11 @@ c) Data, u kterých chybí *castka* - ponechat a vložit 0.
 d) Ve sloupci *castka* se objevují i záporné hodnoty. Ty považuji za vratky - smazat
 - Opět vzhledem k charakteru case study jsem se rozhodla pro toto řešení. Za jiných okolností by se data mazat nemusela.
 
-e) Upravila jsem formát datumu z dd.mm.yyyy na yyyy-mm-dd
+e) Ve sloupci *castka* jsem změnila , za .
 
-f) Odstranila data, která nespadají do období 2023-01-01 - 2024-09-30.
+f) Upravila jsem formát datumu z dd.mm.yyyy na yyyy-mm-dd
+
+g) Odstranila data, která nespadají do období 2023-01-01 - 2024-09-30.
 
 
 ```sql
@@ -140,30 +142,19 @@ where castka like '-%';
 
 # bod e)
 update staging_orders_cz
-set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
-where datum_nakupu like '%.%';
+set castka = replace(castka, ',', '.')
+where castka like '%,%';
 
 # bod f)
 update staging_orders_cz
-set castka = replace(castka, ',', '.')
-where castka like '%,%';
+set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
+where datum_nakupu like '%.%';
 
 # bod g)
 delete from staging_orders_cz 
 where datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 ```
-
-Upravila jsem ještě formát sloupce *castka* a nahradila čárku tečkou. 
-
-```sql
-
-# nahrazení desetinné čárky tečkou
-update staging_orders_cz
-set castka = replace(castka, ',', '.')
-where castka like '%,%';
-```
-
 
 
 #### 5. Odstranila jsem duplicity
