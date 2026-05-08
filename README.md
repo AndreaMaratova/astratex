@@ -31,7 +31,7 @@ Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře.
 ## Shrnutí práce a odpovězení na zadané otázky
 
 
-
+## Zodpovězení zadaných otázek a shrnutí práce
 
 1) Jaký datový zdroj bys napojil/a a jak bys data připravil/a pro Looker Studio
 - Záleželo by, kde by zdrojová data byla. Já jsem pro tento úkol šla cestou "nejmenšího odporu" a jelikož jde o jednorázové řešení, nahrála jsem .csv do Google Sheets, nad kterými jsem pak udělala vizualizaci v Looker Studiu. V produkčním prostředí bych preferovala přímé napojení Looker Studia na databázové view nebo datový sklad, aby byl report automaticky aktualizovaný a nebylo nutné pracovat s ručním exportem. Jelikož moje databáze běží lokálně, bylo by napojení na Looker Studio náročnější.
@@ -44,8 +44,12 @@ Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře.
 4) Jakékoliv limity nebo úskalí, která by tě při realizaci čekala
 - Jelikož vizualizace byla dělána v Looker Studiu, které mi není úplně nejbližší, tak bych řekla, že největším úskalím pro mě bylo ze začátku samotné Looker Studio :D Asi největším limitem zvoleného řešení je ruční export dat do Google Sheets. Pro dlouhodobé produkční využití by bylo vhodnější přímé napojení na databázi nebo datový sklad. Dalším úskalím je správné nastavení datových typů v Google Sheets a agregací v Looker Studiu, aby se předpočítané retenční metriky dále nesčítaly nebo neinterpretovaly jako text.
 
-Shrnutí práce (3-5 vět)
+**Shrnutí práce:** 
+
 V rámci case study jsem připravila transakční data ze tří trhů, provedla jejich validaci a očištění ve staging tabulkách a následně vytvořila finální tabulky. Nad sjednoceným view jsem připravila SQL kohortní analýzu zákaznické retence v obdobích M0, M3, M6 a M9. Výsledky jsem exportovala do retenční tabulky a vizualizovala v Looker Studiu s možností filtrování podle země a měsíce kohorty.
 
-<img width="1824" height="1483" alt="image" src="https://github.com/user-attachments/assets/bb7ff6aa-2ecc-4e47-b5f7-88e8958f30d0" />
-<img width="1805" height="695" alt="image" src="https://github.com/user-attachments/assets/0867c3ea-360f-4822-9ae6-7db10d1c4a0e" />
+Z výsledků je patrné, že průměrná retence zákazníků se napříč sledovanými obdobími pohybuje přibližně mezi 26–29 %. Retence M3, M6 a M9 je relativně stabilní, bez jednoznačného dlouhodobého růstového nebo klesajícího trendu. Silnější návratovost vykazují některé kohorty z první poloviny roku 2023, zatímco u novějších kohort je část hodnot ponechána jako null, protože pro ně nejsou dostupná kompletní retenční okna. Hodnoty null proto neznamenají nulovou retenci, ale neúplnost dostupných dat.
+
+<img width="1821" height="1491" alt="image" src="https://github.com/user-attachments/assets/4e63b564-99a1-474b-9095-b48075117dfb" />
+<img width="1811" height="771" alt="image" src="https://github.com/user-attachments/assets/aebb27c1-347a-4dd8-b044-aa9f92f0a9b7" />
+
