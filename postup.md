@@ -315,7 +315,7 @@ from orders_hu;
 Provedla jsem kontrolu, jestli se nahrály všechny záznamy.
 
 ```sql
-select count(1) from vw_orders_all; # 2 882 záznamů = 952 (CZ) + 959 (SK) + 971 (HU)    - sedí
+select count(1) from vw_orders_all; # 2 870 záznamů = 948 (CZ) + 955 (SK) + 967 (HU)    - sedí
 ```
 
 
