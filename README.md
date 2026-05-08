@@ -21,11 +21,11 @@ Kompletní SQL skript naleznete [zde](https://github.com/AndreaMaratova/CRM-Anal
 
 SQL skript ke kohortní analýze naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/skript_kohortni_analyza.sql). 
 
-Export výsledné kohorní retenční tabulky naleznete [zde](). Soubor neotvírejte v Excelu - přepíše se formátování. 
+Export výsledné kohorní retenční tabulky naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/kohorni_retencni_tabulka.csv). Soubor neotvírejte v Excelu - přepíše se formátování. 
 
-Vizualizaci dat přes Looker Studio naleznete [zde](). 
+Vizualizaci dat přes Looker Studio naleznete [zde](). - Bude doplněno
 
 Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře. 
 
 ## Shrnutí práce
-
+Bude doplněno
