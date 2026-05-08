@@ -331,16 +331,16 @@ where castka like '-%';
 
 # bod e)
 update staging_orders_sk
-set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
-where datum_nakupu like '%.%';
-
-# bod f)
-update staging_orders_sk
 set castka = replace(castka, ',', '.')
 where castka like '%,%';
 
+# bod f)
+update staging_orders_sk
+set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
+where datum_nakupu like '%.%';
+
 # bod g)
-delete from staging_orders_sk 
+delete from staging_orders_sk
 where datum_nakupu not between '2023-01-01' and '2024-12-31';
 
 select * from staging_orders_sk sos 
@@ -427,10 +427,11 @@ having count(1) > 1;
 
 select count(1) from staging_orders_sk sos ; # 955
 
-select * from staging_orders_sk;
+select * from staging_orders_sk
+limit 10;
 
 
-# Vytvoření finálních tabulek
+# Vytvoření finální tabulky
 
 
 create table orders_sk (
@@ -564,13 +565,13 @@ where castka like '-%';
 
 # bod e)
 update staging_orders_hu
-set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
-where datum_nakupu like '%.%';
+set castka = replace(castka, ',', '.')
+where castka like '%,%';
 
 # bod f)
 update staging_orders_hu
-set castka = replace(castka, ',', '.')
-where castka like '%,%';
+set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
+where datum_nakupu like '%.%';
 
 # bod g)
 delete from staging_orders_hu 
@@ -660,10 +661,11 @@ having count(1) > 1;
 
 select count(1) from staging_orders_hu soh ; # 967
 
-select * from staging_orders_hu;
+select * from staging_orders_hu
+limit 10;
 
 
-# Vytvoření finálních tabulek
+# Vytvoření finální tabulky
 
 create table orders_hu (
     transakce_id int primary key,
@@ -701,6 +703,7 @@ select count(1) from orders_hu ; # 967
 -- -------------------------------------------------------------------------------------------------------------------------------------
 -- -------------------------------------------------------------------------------------------------------------------------------------
 
+
 create view vw_orders_all as
 select
     concat(kod_zeme, '-', transakce_id) as global_transakce_id,
@@ -730,4 +733,3 @@ select
 from orders_hu;
 
 select count(1) from vw_orders_all; # 2 870 záznamů = 948 (CZ) + 955 (SK) + 967 (HU);
-
