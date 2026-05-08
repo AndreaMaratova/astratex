@@ -319,7 +319,7 @@ select count(1) from vw_orders_all; # 2 882 záznamů = 952 (CZ) + 959 (SK) + 97
 ```
 
 
-## Vytvoření skriptu pro výpočet kohorty
+## 3. Vytvoření skriptu pro výpočet kohorty
 
 #### 1. Nejprve jsem vytvořila základ pro správný výpočet kohorty. Aby bylo možné v reportu jednodušše filtrovat, jsou data uvedena jak po jednotlivých zemích, tak i jako celek za všechny 3 země. 
 
