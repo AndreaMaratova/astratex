@@ -1,6 +1,6 @@
 # Postup při vypracování case study
 
-Tento soubor slouží jako popis postupu při vypracování case study. Pokud byl nějaký kód repetitivní, je zde uveden jen na jednom příkladu. Kompletní skript najdete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/skript.sql). 
+Tento soubor slouží jako popis postupu při vypracování Case Study. Pokud byl nějaký kód repetitivní, je zde uveden jen na jednom příkladu. Kompletní skript najdete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/skript.sql). 
 
 ## 1. Validace a nahrání zdrojových dat do databáze
 #### 1. Rozdělila jsem data ze zdrojového .xlsx souboru do tří .csv souborů dle národnosti. Vytvořila jsem samostatné soubory *cz.csv*, *sk.csv* a *hu.csv*. 
