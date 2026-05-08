@@ -84,9 +84,12 @@ where zakaznik_id is null
 	or trim(castka) = ''
 	or char_length(castka) = 1
 	or zakaznik_id not like "CZ%"
-	or castka like '-%';
+	or castka like '-%'
+	or datum_nakupu like '%.%';
+
 ```
-<img width="600" height="450" alt="image" src="https://github.com/user-attachments/assets/a45b1fd5-dde1-4294-9c6c-e4496ca7d1b5" />
+<img width="620" height="450" alt="image" src="https://github.com/user-attachments/assets/f3923550-dd0d-4c13-b703-c5465e7bab07" />
+
 
 
 
@@ -103,7 +106,9 @@ c) Data, u kterých chybí *castka* - ponechat a vložit 0.
 - V závislosti na charakteru této case study jsem se rozhodla tyto záznamy ponechat. Za jiných okolností by se mohlo k těmto záznamů přistupovat jinak, např. nahrazením chybějící hodnoty průměrem všech částek nebo jejich odstraněním.
 
 d) Ve sloupci *castka* se objevují i záporné hodnoty. Ty považuji za vratky - smazat
-- Opět vzhledem k charakteru case study jsem se rozhodla pro toto řešení. Za jiných okolností by se data mazat nemusela. 
+- Opět vzhledem k charakteru case study jsem se rozhodla pro toto řešení. Za jiných okolností by se data mazat nemusela.
+
+e) Upravila jsem formát datumu z dd.mm.yyyy na yyyy-mm-dd
 
 
 ```sql
@@ -129,6 +134,11 @@ where castka is null
 delete from staging_orders_cz
 where castka like '-%';
 
+# bod e)
+update staging_orders_cz
+set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
+where datum_nakupu like '%.%';
+
 ```
 
 Upravila jsem ještě formát sloupce *castka* a nahradila čárku tečkou. 
@@ -141,16 +151,6 @@ set castka = replace(castka, ',', '.')
 where castka like '%,%';
 ```
 
-Změnila jsem formát u datumu z dd.mm.yyyy na yyyy-mm-dd
-
-```sql
-# změna formátu u datumu z dd.mm.yyyy na yyyy-mm-dd
-
-update staging_orders_cz
-set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
-where datum_nakupu like '%.%';
-
-```
 
 
 #### 5. Odstranila jsem duplicity
