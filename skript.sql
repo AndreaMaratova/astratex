@@ -66,7 +66,7 @@ where zakaznik_id is null
 	or trim(zakaznik_id) = ''
 	or trim(datum_nakupu) = ''
 	or trim(castka) = ''
-	or char_length(castka) = 1
+	or char_length(castka) = 1 # chci si zobrazit případné nesmyslné výsledky / znaky
 	or zakaznik_id not like "CZ%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
@@ -98,13 +98,13 @@ where castka like '-%';
 
 # bod e)
 update staging_orders_cz
-set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
-where datum_nakupu like '%.%';
+set castka = replace(castka, ',', '.')
+where castka like '%,%';
 
 # bod f)
 update staging_orders_cz
-set castka = replace(castka, ',', '.')
-where castka like '%,%';
+set datum_nakupu = date_format(str_to_date(datum_nakupu, '%d.%m.%Y'), '%Y-%m-%d')
+where datum_nakupu like '%.%';
 
 # bod g)
 delete from staging_orders_cz 
@@ -299,7 +299,7 @@ where zakaznik_id is null
 	or trim(zakaznik_id) = ''
 	or trim(datum_nakupu) = ''
 	or trim(castka) = ''
-	or char_length(castka) = 1
+	or char_length(castka) = 1 # chci si zobrazit případné nesmyslné výsledky / znaky
 	or zakaznik_id not like "SK%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
@@ -533,7 +533,7 @@ where zakaznik_id is null
 	or trim(zakaznik_id) = ''
 	or trim(datum_nakupu) = ''
 	or trim(castka) = ''
-	or char_length(castka) = 1
+	or char_length(castka) = 1 # chci si zobrazit případné nesmyslné výsledky / znaky
 	or zakaznik_id not like "HU%"
 	or castka like '-%'
 	or datum_nakupu like '%.%'
