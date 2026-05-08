@@ -3,7 +3,7 @@
 Tento soubor slouží jako popis postupu při vypracování Case Study. Pokud byl nějaký kód repetitivní, je zde uveden jen na jednom příkladu. Kompletní skript najdete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/skript.sql). 
 
 ## 1. Validace a nahrání zdrojových dat do databáze
-#### 1. Rozdělila jsem data ze zdrojového .xlsx souboru do tří .csv souborů dle národnosti. Vytvořila jsem samostatné soubory *cz.csv*, *sk.csv* a *hu.csv*. 
+#### 1. Rozdělila jsem data ze zdrojového .xlsx souboru do tří .csv souborů dle jednotlivých zemí. Vytvořila jsem samostatné soubory *cz.csv*, *sk.csv* a *hu.csv*. 
 #### 2. V databázi jsem vytvořila tři staging tabulky: *staging_orders_cz*, *staging_orders_sk* a *staging_orders_hu* se dvěma novými sloupci:
 - transakce_id - id daného záznamu
 - kod_zeme - země pro snazší filtrování
@@ -105,7 +105,7 @@ b) Data, u kterých chybí ve sloupci *zakaznik_id* prefix země - doplnit prefi
 
 c) Data, u kterých chybí *castka* - ponechat a vložit 0.
 	
-- V závislosti na charakteru této case study jsem se rozhodla tyto záznamy ponechat. Za jiných okolností by se mohlo k těmto záznamů přistupovat jinak, např. nahrazením chybějící hodnoty průměrem všech částek nebo jejich odstraněním.
+- Jelikož hlavním cílem této Case Study je retenční analýza založená na počtu zákazníků, mnou vložená 0 nijak tuto statistiku neovlivňuje, jelikož je důležité to, že zákazník provedl další objednávku, nikoli její hodnota. Pokud bychom chtěli dělat jiné analýzy, pak by se k chybějícím datům mohlo přistupovat jinak např. nahrazením chybějící hodnoty průměrem všech částek nebo jejich odstraněním.
 
 d) Ve sloupci *castka* se objevují i záporné hodnoty. Ty považuji za vratky - smazat
 - Opět vzhledem k charakteru case study jsem se rozhodla pro toto řešení. Za jiných okolností by se data mazat nemusela.
