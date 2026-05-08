@@ -114,7 +114,7 @@ e) Ve sloupci *castka* jsem změnila , za .
 
 f) Upravila jsem formát datumu z dd.mm.yyyy na yyyy-mm-dd
 
-g) Odstranila data, která nespadají do období 2023-01-01 - 2024-09-30.
+g) Odstranila jsem data, která nespadají do období 2023-01-01 - 2024-09-30.
 
 
 ```sql
