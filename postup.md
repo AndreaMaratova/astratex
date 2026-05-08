@@ -152,7 +152,7 @@ where datum_nakupu like '%.%';
 
 # bod g)
 delete from staging_orders_cz 
-where datum_nakupu not between '2023-01-01' and '2024-12-31';
+where datum_nakupu not between '2023-01-01' and '2024-09-30';
 
 ```
 
