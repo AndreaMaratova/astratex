@@ -24,7 +24,7 @@ SQL skript ke kohortní analýze naleznete [zde](https://github.com/AndreaMarato
 
 Export výsledné kohortní retenční tabulky naleznete [zde](https://github.com/AndreaMaratova/CRM-Analytik-Case-Study/blob/main/kohorni_retencni_tabulka.csv). Soubor neotvírejte v Excelu - přepíše se formátování. 
 
-Vizualizaci dat přes Looker Studio naleznete [zde](https://datastudio.google.com/s/iEPu3P8QDuc).
+Vizualizaci dat přes Looker Studio naleznete [zde](https://datastudio.google.com/s/iEPu3P8QDuc). Dashboard obsahuje retenční tabulku s heatmapou, filtry podle země a období kohorty a trendový graf vývoje retence M3/M6/M9.
 
 Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře. 
 
