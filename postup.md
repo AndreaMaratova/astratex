@@ -35,7 +35,7 @@ select count(1) from staging_orders_cz; #969 - sedí
 
 
 ```
-#### 4. Zkontrolovala jsem, zda jsou všechny hodnoty v mnou požadovaném formátu. Při vizuální kontrole dat v Excelu jsem si všimla zdánlivých NULL hodnot jak ve sloupci *zakaznik_id*, tak ve sloupci *castka*.
+#### 4. Zkontrolovala jsem, zda jsou všechny hodnoty v mnou požadovaném formátu. Při vizuální kontrole dat v Excelu jsem si všimla zdánlivých NULL hodnot jak ve sloupci *zakaznik_id*, tak ve sloupci *castka*. Zároveň jsem narazila na formátování datumu dd.mm.yyyy místo požadovaného yyyy-mm-dd.
 
 Nejprve jsem se rozhodla jsem se očistit data z obou stran o "neviditelné znaky" - escape znaky, tab a pevné mezery. 
 
