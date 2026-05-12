@@ -42,7 +42,7 @@ Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře.
 3) Jak bys ošetřil/a filtry a jejich vzájemné propojení
 - Filtry jsem zvolila na základě země (CZ, SK, HU a ALL, které je kombinací všech zemí). Jako další filtr jsem zvolila filtr měsíce kohorty. Oba filtry jsou napojené na stejný zdroj dat, takže se automaticky promítají do všech metrik i grafů.
 4) Jakékoliv limity nebo úskalí, která by tě při realizaci čekala
-- Jelikož vizualizace byla dělána v Looker Studiu, které mi není úplně nejbližší, tak bych řekla, že největším úskalím pro mě bylo ze začátku samotné Looker Studio :D Asi největším limitem zvoleného řešení je ruční export dat do Google Sheets. Pro dlouhodobé produkční využití by bylo vhodnější přímé napojení na databázi nebo datový sklad. Dalším úskalím je správné nastavení datových typů v Google Sheets a agregací v Looker Studiu, aby se předpočítané retenční metriky dále nesčítaly nebo neinterpretovaly jako text.
+- Asi největším limitem zvoleného řešení je ruční export dat do Google Sheets. Pro dlouhodobé produkční využití by bylo vhodnější přímé napojení na databázi nebo datový sklad. Dalším úskalím je správné nastavení datových typů v Google Sheets a agregací v Looker Studiu, aby se předpočítané retenční metriky dále nesčítaly nebo neinterpretovaly jako text.
 
 **Shrnutí práce:** 
 
