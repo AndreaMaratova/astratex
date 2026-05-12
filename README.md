@@ -28,9 +28,6 @@ Vizualizaci dat přes Looker Studio naleznete [zde](https://datastudio.google.co
 
 Zdrojová data nejsou z důvodu bezpečnosti součástí repozitáře. 
 
-## Shrnutí práce a odpovězení na zadané otázky
-
-
 ## Zodpovězení zadaných otázek a shrnutí práce
 
 1) Jaký datový zdroj bys napojil/a a jak bys data připravil/a pro Looker Studio
